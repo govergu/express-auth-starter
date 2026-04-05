@@ -40,6 +40,7 @@ A production-ready authentication system built with Express, MongoDB, and JWT.
 
 ## 📂 Project Structure
 
+```
 src/
 │
 ├── modules/
@@ -58,6 +59,8 @@ src/
 ├── config/
 ├── app.ts
 ├── server.ts
+
+```
 
 ---
 
