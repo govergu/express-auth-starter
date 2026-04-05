@@ -23,6 +23,7 @@ import {
 const router = express.Router();
 
 router.post("/register", validate(registerSchema), register);
+
 router.get("/verify-email", verifyEmail);
 
 router.post("/login", validate(loginSchema), login);

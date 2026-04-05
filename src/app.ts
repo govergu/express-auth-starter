@@ -21,19 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("Server is running...");
-});
-app.get("/error", (req, res, next) => {
-  next(new AppError("This is a test error", 400));
-});
-app.get("/api/v1/protected", protect, (req, res) => {
-  res.json({
-    status: "success",
-    user: (req as any).user,
-  });
-});
-
 //Authentication Routes
 app.use("/api/v1/auth", authRoutes);
 

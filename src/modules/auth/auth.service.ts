@@ -2,10 +2,10 @@ import { AppError } from "../../common/utils/appError";
 import { signAccessToken, signRefreshToken } from "../../common/utils/jwt";
 import { generateToken } from "../../common/utils/token";
 import { ENV } from "../../config/env";
-import { sendMail } from "../../infrastructure/database/email.service";
 import { User } from "../user/user.model";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { sendMail } from "../../infrastructure/services/email.service";
 
 export const registerUser = async (data: any) => {
   const existingUser = await User.findOne({ email: data.email });
