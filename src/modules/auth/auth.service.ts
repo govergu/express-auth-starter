@@ -2,10 +2,10 @@ import { AppError } from "../../common/utils/appError";
 import { signAccessToken, signRefreshToken } from "../../common/utils/jwt";
 import { generateToken } from "../../common/utils/token";
 import { ENV } from "../../config/env";
+import { sendMail } from "../../infrastructure/services/email.service";
 import { User } from "../user/user.model";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { sendMail } from "../../infrastructure/services/email.service";
 
 export const registerUser = async (data: any) => {
   const existingUser = await User.findOne({ email: data.email });
@@ -24,6 +24,13 @@ export const registerUser = async (data: any) => {
 
   await user.save();
 
+  const userObj = user.toObject();
+  delete (userObj as { password?: string }).password;
+  delete (userObj as { emailVerificationToken?: string })
+    .emailVerificationToken;
+  delete (userObj as { emailVerificationExpires?: string })
+    .emailVerificationExpires;
+
   // 🔗 verification link
   const verifyURL = `${ENV.FRONTEND_URL}/verify-email?token=${rawToken}`;
 
@@ -33,7 +40,7 @@ export const registerUser = async (data: any) => {
     `<h3>Click to verify:</h3><a href="${verifyURL}">${verifyURL}</a>`,
   );
 
-  return user;
+  return { user: userObj };
 
   // const accessToken = signAccessToken(user._id.toString());
   // const refreshToken = signRefreshToken(user._id.toString());
@@ -67,7 +74,10 @@ export const verifyEmailToken = async (token: string) => {
 
   await user.save();
 
-  return { user, accessToken, refreshToken };
+  const userObj = user.toObject();
+  delete (userObj as { refreshToken?: string }).refreshToken;
+
+  return { user: userObj, accessToken, refreshToken };
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -92,7 +102,11 @@ export const loginUser = async (email: string, password: string) => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  return { user, accessToken, refreshToken };
+  const userObj = user.toObject();
+  delete (userObj as { password?: string }).password;
+  delete (userObj as { refreshToken?: string }).refreshToken;
+
+  return { user: userObj, accessToken, refreshToken };
 };
 
 export const refreshUserToken = async (token: string) => {
