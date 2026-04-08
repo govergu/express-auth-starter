@@ -57,10 +57,10 @@ export const login = catchAsync(async (req: Request, res: Response) => {
 
 export const refresh = catchAsync(async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
-  const { newAccessToken, newRefreshToken } = await refreshUserToken(token);
+  const { newAccessToken } = await refreshUserToken(token);
 
   setTokenCookie(res, "accessToken", newAccessToken, ACCESS_TOKEN_EXPIRY);
-  setTokenCookie(res, "refreshToken", newRefreshToken, REFRESH_TOKEN_EXPIRY);
+  // setTokenCookie(res, "refreshToken", newRefreshToken, REFRESH_TOKEN_EXPIRY);
 
   res.json({ status: "success" });
 });
@@ -81,16 +81,16 @@ export const getMe = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const user = await User.findByIdAndUpdate(req.user.id, req.body, {
-    new: true,
-  });
+// export const updateProfile = catchAsync(async (req: Request, res: Response) => {
+//   const user = await User.findByIdAndUpdate(req.user.id, req.body, {
+//     new: true,
+//   });
 
-  res.json({
-    status: "success",
-    data: user,
-  });
-});
+//   res.json({
+//     status: "success",
+//     data: user,
+//   });
+// });
 
 export const changePassword = catchAsync(
   async (req: Request, res: Response) => {

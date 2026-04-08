@@ -67,8 +67,8 @@ export const verifyEmailToken = async (token: string) => {
   user.emailVerificationToken = undefined;
   user.emailVerificationExpires = undefined;
 
-  const accessToken = signAccessToken(user._id.toString());
-  const refreshToken = signRefreshToken(user._id.toString());
+  const accessToken = signAccessToken(user._id.toString(), user.role);
+  const refreshToken = signRefreshToken(user._id.toString(), user.role);
 
   user.refreshToken = refreshToken;
 
@@ -96,8 +96,8 @@ export const loginUser = async (email: string, password: string) => {
     throw new AppError("Please verify your email first", 401);
   }
 
-  const accessToken = signAccessToken(user._id.toString());
-  const refreshToken = signRefreshToken(user._id.toString());
+  const accessToken = signAccessToken(user._id.toString(), user.role);
+  const refreshToken = signRefreshToken(user._id.toString(), user.role);
 
   user.refreshToken = refreshToken;
   await user.save();
@@ -127,13 +127,13 @@ export const refreshUserToken = async (token: string) => {
   }
 
   // 🔥 ROTATION
-  const newAccessToken = signAccessToken(user._id.toString());
-  const newRefreshToken = signRefreshToken(user._id.toString());
+  const newAccessToken = signAccessToken(user._id.toString(), user.role);
+  // const newRefreshToken = signRefreshToken(user._id.toString());
 
-  user.refreshToken = newRefreshToken;
-  await user.save();
+  // user.refreshToken = newRefreshToken;
+  // await user.save();
 
-  return { newAccessToken, newRefreshToken };
+  return { newAccessToken };
 };
 
 export const logoutUser = async (userId: string) => {
