@@ -32,7 +32,7 @@ export const registerUser = async (data: any) => {
     .emailVerificationExpires;
 
   // 🔗 verification link
-  const verifyURL = `${ENV.FRONTEND_URL}/verify-email?token=${rawToken}`;
+  const verifyURL = `${ENV.FRONTEND_URL}/verify-email/${rawToken}`;
 
   await sendMail(
     user.email,
@@ -154,7 +154,7 @@ export const forgotPassword = async (email: string) => {
 
   await user.save();
 
-  const resetURL = `${ENV.FRONTEND_URL}/reset-password?token=${rawToken}`;
+  const resetURL = `${ENV.FRONTEND_URL}/reset-password/${rawToken}`;
 
   await sendMail(
     user.email,

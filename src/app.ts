@@ -13,7 +13,14 @@ import { protect } from "./common/middlewares/auth.middleware";
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // DO NOT use '*'
+    credentials: true, // Allow cookies/auth headers
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(morgan("dev"));
 
 app.use(express.json());

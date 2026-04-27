@@ -21,7 +21,7 @@ const REFRESH_TOKEN_EXPIRY = Number(ENV.COOKIE_EXPIRES_DAYS) * 24 * 60 * 60;
 export const register = catchAsync(async (req: Request, res: Response) => {
   const user = await registerUser(req.body);
 
-  res.status(201).json({ status: "success", data: { user } });
+  res.status(201).json({ status: "success", data: user });
 });
 
 export const verifyEmail = catchAsync(async (req: Request, res: Response) => {
